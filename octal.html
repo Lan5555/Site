@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Octal Converter</title>
+    <style>
+    body {
+        background-color:lightblue;
+    }
+    h1 {
+        text-align : center;
+    }
+    #first {
+       
+        border-radius: 20px;
+        border-color : black;
+    }
+    button {
+        border-radius:20px;
+        box-shadow:2px 3px black;
+    }
+    #display {
+        border-radius:10px;
+        width:300px;
+        height:70px;
+    }
+    
+    </style>
+    
+    <body>
+    <h1>Octal Converter</h1>
+    <form id = "bin" onsubmit = "octal(); return false;">
+    <input type = "number" id = "first" placeholder = "enter number" required><br>
+    <br>
+    <button type = "submit">convert</button><br>
+    <br>
+    <input id = "display" readonly></input>
+    <p id = "result"></p>
+    </form>
+    
+    <script>
+    function octal(){
+        let num = document.getElementById("first").value;
+        let answer = "";
+        let final = "";
+        
+        while(num > 0){
+            let divide = num % 8;
+            answer += divide.toString();
+            num = Math.floor(num / 8);
+        }
+        for(let i = answer.length -1; i >= 0; i--){
+            final += answer[i];
+        }
+        document.getElementById("display").value = final + String.fromCharCode(0x2088);
+    }
+    </script>
+    </body>

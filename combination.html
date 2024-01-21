@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang = "en-us">
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<body>
+<h2>Combination Calculator</h2>
+<style>
+ h2 {
+     color : black;
+     text-align : center;
+     
+     }
+ button {
+     color : green;
+     
+     }
+ 
+ #result {
+     color: green
+     
+     }
+ 
+ body{
+     background-color: lightblue;
+ }
+ 
+ #n {
+     border-radius : 10px;
+ }
+ #r {
+     border-radius : 10px;
+ }
+ button {
+     border-radius: 10px;
+     box-shadow: 3px 3px black;
+ }
+ #display {
+        border-radius:10px;
+        width:300px;
+        height:70px;
+    }
+
+ </style>
+ <form id="fact" onsubmit="combination(); return false;">
+  <input type = "number" id = "n" placeholder = "enter n" required><br>
+  <br>
+  <input type = "number" id = "r" placeholder = "enter r"
+  required><br>
+  <br>
+  <button type = "submit">Answer
+  </button>
+  <br>
+  <br>
+   <input id = "display" readonly></input>
+ 
+  
+  </form>
+  <p id ="result"</p>
+  
+  <script>
+  function combination(){
+      function factorial(n){
+          if(n < 1){
+              return 1;
+          }
+          return n * factorial(n - 1);
+      }
+      let num1 = document.getElementById("n").value;
+      let num2 = document.getElementById("r").value;
+      let answer = factorial(num1)/(factorial(num2)*factorial(num1-num2));
+      document.getElementById("display").value = answer;
+      
+  }
+  </script>
+  </body>
+  </html>
+  
