@@ -16,18 +16,83 @@
      border-radius:10px;
      box-shadow : 7px 3px 9px black;
  }
-    #tan p{
-        color:white;
-    }
-</style>
+ #tan {
+     color: white;
+ }
+ .icon {
+            display: block;
+            float: left;
+            vertical-align: top;
+            color: white;
+            border-radius: 50px;
+        }
+
+        .icon:hover {
+            color: red;
+        }
+
+        nav ul {
+            display: flex;
+            flex-direction: column;
+            list-style: none; /* Remove default list styles */
+            padding: 0;
+        }
+
+        nav li {
+            float: left;
+        }
+
+        #btn {
+            border-radius: 15px;
+            width: 30px;
+            box-shadow: 3px 4px;
+            margin-top:40px;
+            margin-left: 20px;
+            display:none;
+        }
+        #choice{
+            text-align:center;
+            display:none;
+            margin-top:-70px;
+        }
+        
+        
+    </style>
+</head>
 <body>
+    <nav>
+        <div class="icon" onclick="menu()">&#9776;</div>
+        <ul>
+          <li><button id="btn" onclick = "change()">C</button></li>
+        </ul>
+    </nav>
+<br>
+<br>
+
+<strong id = "choice" onsubmit = "change()"> &#x1F448 change text color?</strong>
+<br>
 <audio controls autoplay>
         <source src="read.mp3" type="audio/mp3">
-    </audio><br>
-    <br>
+    </audio>
     <h1>Examples to code</h1>
- 
-    <div id = "tan"><p>Coding challenges are a great way to improve your programming skills, keep your mind sharp, and learn new things. These challenges come in many different forms, from puzzles and games to programming problems and algorithmic challenges. In this article, we’ll explore five fun coding challenges that can help you sharpen your skills and have a great time doing it.
+  <script>
+  function menu() {
+            var button = document.getElementById('btn');
+            var stuff = document.getElementById("choice")
+            button.style.display = (button.style.display === 'none' || button.style.display === '') ? 'block' : 'none';
+            stuff.style.display = (stuff.style.display === 'none'|| stuff.style.display === '') ? 'block':'none';
+        }
+        
+        function change(){
+            
+            var x = document.getElementById("tan");
+            colors = ['red','black','blue','pink','yellow','brown','gold','white'];
+     var select = colors[Math.floor(Math.random() * colors.length)];
+     x.style.color = select;
+            
+        }
+    </script>
+    <div id = "tan">Coding challenges are a great way to improve your programming skills, keep your mind sharp, and learn new things. These challenges come in many different forms, from puzzles and games to programming problems and algorithmic challenges. In this article, we’ll explore five fun coding challenges that can help you sharpen your skills and have a great time doing it.
     <br>
     <br>
 <strong>1. FizzBuzz</strong><br>
@@ -157,7 +222,5 @@ Coding challenges are a great way to improve your programming skills and have fu
 <br>
 Whether you need custom software development or technical consulting, I am here to help. Reach out to me via LinkedIn , to learn more about my services and how I can assist you with your next project.
 <br>
-</p>
-    </div>
 </body>
 </html>
