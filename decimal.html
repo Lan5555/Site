@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+    h1 {
+        text-align:center;
+    }
+    #first {
+        border-radius:10px;
+        box-shadow:3px 2px 2px;
+    }
+    
+    #btn {
+        
+        box-shadow:3px 2px;
+        border-radius:10px;
+    }
+    body {
+        background-color: lightblue;
+    }
+     #display {
+        border-radius:10px;
+        width:300px;
+        height:70px;
+    }
+    </style>
+    <body>
+    <h1>Decimal to binary</h1>
+    <form id = "lan" onsubmit = "decimal(); return false;">
+    <input type = "number" id = "first" placeholder = "enter binary" required><br>
+    <br>
+    <button id = "btn">Answer</button><br>
+    <br>
+    <input id = "display" readonly></input>
+    </form>
+     <p id = "result"></p>
+    </body>
+    <script>
+    function decimal() {
+    var binaryInput = document.getElementById("first").value;
+
+    // Check if the input contains only 0s and 1s
+    if (/^[01]+$/.test(binaryInput)) {
+        var i = 0;
+        var remainder;
+        var decimalNum = 0;
+
+        while (binaryInput != 0) {
+            remainder = binaryInput % 10;
+            binaryInput = Math.floor(binaryInput / 10);
+            decimalNum += remainder * Math.pow(2, i);
+            i++;
+        }
+
+        document.getElementById("display").value = decimalNum;
+    } else {
+        alert("Please enter a valid binary number (containing only 0s and 1s).");
+    }
+}
+    </script>
+</body>
