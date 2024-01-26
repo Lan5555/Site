@@ -1,131 +1,174 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChatGPT Example</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f8f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-image : url('lan.jpeg');
+    }
 
-        #chat-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            padding: 10px;
-        }
+    .chat-box {
+      width: 300px;
+      background-color: #fff;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
 
-        .message {
-            margin-bottom: 10px;
-            padding: 10px;
-            border-radius: 8px;
-        }
+    .chat-header {
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
 
-        .user {
-            background-color: #3498db;
-            color: #fff;
-            align-self: flex-end;
-        }
+    .chat-body {
+      padding: 10px;
+      height: 300px;
+      overflow-y: auto;
+      background-color: #f5f5f5;
+    }
 
-        .chatGPT {
-            background-color: #ecf0f1;
-            color: #34495e;
-            align-self: flex-start;
-        }
+    .user-message,
+    .bot-message {
+      padding: 8px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+    }
 
-        input {
-            padding: 8px;
-            margin-right: 10px;
-        }
+    .user-message {
+      background-color: #4CAF50;
+      color: #fff;
+    }
 
-        button {
-            padding: 8px;
-            cursor: pointer;
-        }
+    .bot-message {
+      background-color: #ddd;
+    }
 
-        #loader {
-            display: none;
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #3498db;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            animation: spin 1s linear infinite;
-        }
+    .chat-input {
+      width: calc(100% - 20px);
+      padding: 10px;
+      border: none;
+      border-top: 1px solid #ccc;
+      box-sizing: border-box;
+      border-radius: 0 0 8px 8px;
+      margin: 0 10px;
+    }
 
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-    </style>
+    .send-btn {
+      width: calc(100% - 20px);
+      background-color: #4CAF50;
+      color: #fff;
+      padding: 10px;
+      border: none;
+      border-radius: 0 0 8px 8px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+      margin-right: 10px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
 </head>
 <body>
-    <div id="chat-container">
-        <div id="loader"></div>
+
+  <div class="chat-box">
+    <div class="chat-header">Mini AI Chat</div>
+    <div class="chat-body" id="chatBody">
+      <div class="bot-message">Welcome! How can I assist you today?<br>Type H for help</div>
     </div>
-    <div>
-        <input type="text" id="user-input" placeholder="Type your message...">
-        <button onclick="sendMessage()">Send</button>
-    </div>
+    <div id="loader" class="loader" style="display: none;"></div>
+    <input type="text" id="userInput" class="chat-input" placeholder="Type your message...">
+    <button onclick="sendMessage()" class="send-btn">Send</button>
+  </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    <script>
-        const apiKey = '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';
-        const chatContainer = document.getElementById('chat-container');
-        const loader = document.getElementById('loader');
-        const userInput = document.getElementById('user-input');
 
-        function sendMessage() {
-            const userMessage = userInput.value;
-            displayLoader(true);
 
-            // Call OpenAI API to get response
-            fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`,
-                },
-                body: JSON.stringify({
-                    prompt: userMessage,
-                    max_tokens: 150,
-                }),
-            })
-            .then(response => response.json())
-            .then(data => {
-                const chatGPTResponse = data.choices[0].text;
-                displayMessage(chatGPTResponse, 'chatGPT');
-                displayLoader(false);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                displayLoader(false);
-            });
+<script>
+    const questionResponses = [
+      { question: "hello", response: "Hello! How can I help you?" },
+      { question: "hi", response: "Hi there! What can I do for you?" },
+      { question: "hey", response: "Hey! How can I assist you today?" },
+      { question: "what's good", response: "Not much, just here to help. What about you?" },
+      { question: "tell me something nice", response: "You're awesome! Anything specific you'd like to know?" },
+      { question: "can i have your number ", response: "Sure 09065590812" },
+      { question: "h", response: "contact me via email okekejohnson24@gmail.com" }
+    ];
 
-            displayMessage(userMessage, 'user');
-            userInput.value = '';
+    let chatIndex = 0;
+
+    function sendMessage() {
+      var userInput = document.getElementById("userInput").value;
+      var chatBody = document.getElementById("chatBody");
+      var loader = document.getElementById("loader");
+
+      loader.style.display = "inline-block";
+
+      setTimeout(function () {
+        var userMessage = '<div class="user-message">' + userInput + '</div>';
+        chatBody.innerHTML += userMessage;
+        document.getElementById("userInput").value = "";
+        chatBody.scrollTop = chatBody.scrollHeight;
+
+        // Simulate bot responses with a delay
+        setTimeout(function () {
+          var botMessage = '<div class="bot-message">' + getBotResponse(userInput) + '</div>';
+          chatBody.innerHTML += botMessage;
+          chatBody.scrollTop = chatBody.scrollHeight;
+          loader.style.display = "none";
+
+          // Speak the bot's response
+          speak(botMessage);
+        }, 2000);
+      }, 0);
+    }
+
+    function getBotResponse(userInput) {
+      userInput = userInput.toLowerCase();
+
+      for (const item of questionResponses) {
+        if (userInput.includes(item.question)) {
+          return item.response;
         }
+      }
 
-        function displayMessage(message, sender) {
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `message ${sender}`;
-            messageDiv.innerText = message;
-            chatContainer.appendChild(messageDiv);
-            // Scroll to the bottom to show the latest message
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-        }
+      return "I didn't understand that. My creator NJ designed me just for specific responses.";
+    }
 
-        function displayLoader(show) {
-            loader.style.display = show ? 'block' : 'none';
-        }
-    </script>
+    function speak(message) {
+      // Extract text content from the HTML message
+      var botMessageText = document.createElement("div");
+      botMessageText.innerHTML = message;
+      var textContent = botMessageText.textContent || botMessageText.innerText;
+
+      // Create a new SpeechSynthesisUtterance instance
+      var utterance = new SpeechSynthesisUtterance(textContent);
+
+      // Speak the message
+      window.speechSynthesis.speak(utterance);
+    }
+  </script>
 </body>
 </html>
