@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatGPT Example</title>
+</head>
+<body>
+    <div id="chat-container">
+        <div id="chat-output"></div>
+        <input type="text" id="user-input" placeholder="Type your message...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        const apiKey = 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;
+        const chatOutput = document.getElementById('chat-output');
+        const userInput = document.getElementById('user-input');
+
+        function sendMessage() {
+            const userMessage = userInput.value;
+            displayMessage(userMessage, 'user');
+
+            // Call OpenAI API to get response
+            fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`,
+                },
+                body: JSON.stringify({
+                    prompt: userMessage,
+                    max_tokens: 150,
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const chatGPTResponse = data.choices[0].text;
+                displayMessage(chatGPTResponse, 'chatGPT');
+            })
+            .catch(error => console.error('Error:', error));
+
+            userInput.value = '';
+        }
+
+        function displayMessage(message, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+            messageDiv.innerText = message;
+            chatOutput.appendChild(messageDiv);
+        }
+    </script>
+</body>
+</html>
