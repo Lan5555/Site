@@ -5,10 +5,73 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChatGPT Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+
+        #chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .user {
+            background-color: #3498db;
+            color: #fff;
+            align-self: flex-end;
+        }
+
+        .chatGPT {
+            background-color: #ecf0f1;
+            color: #34495e;
+            align-self: flex-start;
+        }
+
+        input {
+            padding: 8px;
+            margin-right: 10px;
+        }
+
+        button {
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        #loader {
+            display: none;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body>
     <div id="chat-container">
-        <div id="chat-output"></div>
+        <div id="loader"></div>
+    </div>
+    <div>
         <input type="text" id="user-input" placeholder="Type your message...">
         <button onclick="sendMessage()">Send</button>
     </div>
@@ -16,12 +79,13 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         const apiKey = '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';
-        const chatOutput = document.getElementById('chat-output');
+        const chatContainer = document.getElementById('chat-container');
+        const loader = document.getElementById('loader');
         const userInput = document.getElementById('user-input');
 
         function sendMessage() {
             const userMessage = userInput.value;
-            displayMessage(userMessage, 'user');
+            displayLoader(true);
 
             // Call OpenAI API to get response
             fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
@@ -39,9 +103,14 @@
             .then(data => {
                 const chatGPTResponse = data.choices[0].text;
                 displayMessage(chatGPTResponse, 'chatGPT');
+                displayLoader(false);
             })
-            .catch(error => console.error('Error:', error));
+            .catch(error => {
+                console.error('Error:', error);
+                displayLoader(false);
+            });
 
+            displayMessage(userMessage, 'user');
             userInput.value = '';
         }
 
@@ -49,7 +118,13 @@
             const messageDiv = document.createElement('div');
             messageDiv.className = `message ${sender}`;
             messageDiv.innerText = message;
-            chatOutput.appendChild(messageDiv);
+            chatContainer.appendChild(messageDiv);
+            // Scroll to the bottom to show the latest message
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+
+        function displayLoader(show) {
+            loader.style.display = show ? 'block' : 'none';
         }
     </script>
 </body>
